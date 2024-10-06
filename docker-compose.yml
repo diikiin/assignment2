@@ -11,11 +11,15 @@ services:
       - db_data:/var/libs/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - django_network
 
   django:
     build: .
     volumes:
       - .:/app
+      - static_files:/app/static
+      - uploaded_files:/app/upload
     ports:
       - "8000:8000"
     depends_on:
@@ -26,6 +30,14 @@ services:
       DB_PASSWORD: password
       DB_HOST: db
       DB_PORT: 5432
+    networks:
+      - django_network
 
 volumes:
   db_data:
+  static_files:
+  uploaded_files:
+
+networks:
+  django_network:
+    driver: bridge
